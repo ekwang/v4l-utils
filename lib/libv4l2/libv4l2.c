@@ -659,6 +659,7 @@ int v4l2_fd_open(int fd, int v4l2_flags)
 	void *dev_ops_priv;
 	const struct libv4l_dev_ops *dev_ops;
 	long page_size;
+	char *backtrace_env = NULL;
 
 	v4l2_plugin_init(fd, &plugin_library, &dev_ops_priv, &dev_ops);
 
@@ -669,6 +670,10 @@ int v4l2_fd_open(int fd, int v4l2_flags)
 		if (lfname)
 			v4l2_log_file = fopen(lfname, "w");
 	}
+
+	backtrace_env = getenv("LIBV4L2_LOG_BACKTRACE");
+	if (backtrace_env)
+		backtrace_depth = atoi(backtrace_env);
 
 	/* Get page_size (for mmap emulation) */
 	page_size = sysconf(_SC_PAGESIZE);
@@ -1142,7 +1147,7 @@ int v4l2_ioctl(int fd, unsigned long int request, ...)
 	case VIDIOC_S_DV_TIMINGS:
 		is_capture_request = 1;
 		stream_needs_locking = 1;
-		break;		
+		break;
 	}
 
 	if (!is_capture_request) {
