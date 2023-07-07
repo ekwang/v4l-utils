@@ -36,6 +36,7 @@ extern "C" {
 /* Point this to a FILE opened for writing when you want to log error and
    status messages to a file, when NULL errors will get send to stderr */
 LIBV4L_PUBLIC extern FILE *v4l2_log_file;
+extern int backtrace_depth;
 
 /* Just like your regular open/close/etc, except that format conversion is
    done if necessary when capturing. That is if you (try to) set a capture
